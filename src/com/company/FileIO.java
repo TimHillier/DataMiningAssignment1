@@ -7,6 +7,9 @@ public class FileIO {
 
     public static void GetInputFile(String Loc)
     {
+        //open file to read.
+        //the first number will be the number of transactions.
+        int numOfTransactions = -1;
 
     }
 
