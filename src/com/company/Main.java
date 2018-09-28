@@ -14,7 +14,7 @@ public class Main {
         FileIO.GetInputFile(location);
 
 
-        System.out.println(location + "\n" + MinThresh);
+//        System.out.println(location + "\n" + MinThresh);
     }
 
     //gets and checks arguments from CLI
