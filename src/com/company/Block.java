@@ -9,13 +9,13 @@ public class Block {
     public Block()
     {
         Element = "-A";
-        Amount = -1;
+        Amount = 0;
     }
 
-    public Block(String _element, int _amount)
+    public Block(String _element)
     {
         this.Element = _element;
-        this.Amount = _amount;
+        this.Amount = 1;
     }
 
     public int getAmount()

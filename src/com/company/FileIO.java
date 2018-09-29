@@ -60,6 +60,8 @@ public class FileIO {
 
            // System.out.println("First: " + First);
             System.out.println(Arrays.deepToString(BigBrotherArray));
+            ArrayList n = CandidateGen.Generate(BigBrotherArray);
+            System.out.println(n);
         }
         catch(IOException e)
         {
