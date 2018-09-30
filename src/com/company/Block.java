@@ -17,6 +17,11 @@ public class Block {
         this.Element = _element;
         this.Amount = 1;
     }
+    public Block(String _element,int _amount)
+    {
+        this.Element=_element;
+        this.Amount=_amount;
+    }
 
     public int getAmount()
     {

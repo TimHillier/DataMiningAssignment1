@@ -59,9 +59,15 @@ public class FileIO {
                 }
 
            // System.out.println("First: " + First);
-            System.out.println(Arrays.deepToString(BigBrotherArray));
-            ArrayList n = CandidateGen.Generate(BigBrotherArray);
-            System.out.println(n);
+            System.out.println("Start: " + Arrays.deepToString(BigBrotherArray));
+            Block[] n = CandidateGen.Generate(BigBrotherArray);
+
+            for(int i = 0; i < n.length; i++)
+            {
+                System.out.println("Element: " + n[i].getElement() + " : " + n[i].getAmount());
+            }
+
+
         }
         catch(IOException e)
         {

@@ -4,13 +4,13 @@ import com.sun.tools.internal.ws.wsdl.document.Output;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 
 public class CandidateGen {
 
-    public static ArrayList Generate(String[][] InputArray)
+    public static Block[] Generate(String[][] InputArray)
     {
-        ArrayList<Block> OutputArray = new ArrayList<Block>(); //for the output
         ArrayList<String> found = new ArrayList<String>();  //for searching.
 
         for(int i = 0; i < InputArray.length;i++)
@@ -30,13 +30,36 @@ public class CandidateGen {
             }
 
         }
+        Block[] Out = ElementCounter(found,InputArray);
+//        Block[] Out = ElementCounter(found,new ArrayList<String>(Arrays.asList(InputArray)));
+
         System.out.println("Array: " + Arrays.toString(found.toArray()));
 
 
 
 
+        return Out;
+    }
+
+    private static Block[] ElementCounter(ArrayList<String> found, String[][] Input)
+    {
+//        ArrayList<Block> OutputArray = new ArrayList<Block>(); //for the output
+        Block[] OutputArray = new Block[found.size()];
+
+        for(int i = 0; i < found.size();i++)
+        {
+            int amount = 0;
+            for(int j = 0; j<Input.length;j++)
+            {
+
+                    amount += Collections.frequency(Arrays.asList(Input[j]),found.get(i));
 
 
+            }
+            Block temp = new Block(found.get(i),amount);
+            OutputArray[i] = temp;
+
+        }
 
 
 
