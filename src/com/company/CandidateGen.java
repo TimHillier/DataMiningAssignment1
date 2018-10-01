@@ -1,13 +1,20 @@
 package com.company;
-import com.sun.tools.internal.ws.wsdl.document.Input;
-import com.sun.tools.internal.ws.wsdl.document.Output;
-
+import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
 
 public class CandidateGen {
+    static int MIN = -1;
+
+
+    public static void CandidateGen(int _min)
+    {
+        MIN = _min;
+    }
+
+
 
     public static Block[] Generate(String[][] InputArray)
     {
@@ -19,7 +26,6 @@ public class CandidateGen {
             {
                 if(found.contains(InputArray[i][j]))
                 {
-//                    System.out.println("Found " + InputArray[i][j]);
 
                 }
                 else
@@ -30,49 +36,76 @@ public class CandidateGen {
             }
 
         }
-        Block[] Out = ElementCounter(found,InputArray);
-//        Block[] Out = ElementCounter(found,new ArrayList<String>(Arrays.asList(InputArray)));
-
-        System.out.println("Array: " + Arrays.toString(found.toArray()));
+        MIN = found.size() / (100/MIN); // this is trash but I cant math rn. 
 
 
+        HashMap candidates = HashMapTest(found);
+        ElementCounter(InputArray,candidates);
+        printmap(candidates);
+        System.out.println("min " + MIN);
+        Trim(candidates,MIN);
+        printmap(candidates);
+
+
+        Block[] Out = null;
 
 
         return Out;
     }
 
-    private static Block[] ElementCounter(ArrayList<String> found, String[][] Input)
+    //count the number of elements in the input and update the hash map.
+    private static void ElementCounter(String[][] IN, HashMap HM)
     {
-//        ArrayList<Block> OutputArray = new ArrayList<Block>(); //for the output
-        Block[] OutputArray = new Block[found.size()];
-
-        for(int i = 0; i < found.size();i++)
+        for(int i = 0; i < IN.length; i++)
         {
-            int amount = 0;
-            for(int j = 0; j<Input.length;j++)
+            for(int j = 0; j<IN[i].length;j++)
             {
-
-                    amount += Collections.frequency(Arrays.asList(Input[j]),found.get(i));
-
-
+                if(HM.containsKey(IN[i][j]))
+                {
+                    HM.put(IN[i][j],(int)HM.get(IN[i][j])+1);
+                }
             }
-            Block temp = new Block(found.get(i),amount);
-            OutputArray[i] = temp;
+        }
 
+    }
+
+
+    //Generate a hashmap for the current values.
+    private static HashMap HashMapTest(ArrayList<String> found)
+    {
+        //will a hashmap work for this?
+        HashMap<String,Integer> hmap = new HashMap<String,Integer>();
+        for(String f: found)
+        {
+            hmap.put(f,0); //put all the things into the map and set them equal to zero.
+        }
+        printmap(hmap);
+        return hmap;
+    }
+
+    //remove anything below the threshold.
+    private static void Trim(HashMap HM, int MIN)
+    {
+        for(int i = 0; i < MIN;i++)
+        {
+            HM.values().remove(i);
         }
 
 
-
-
-        return OutputArray;
     }
 
-    private static boolean compare(String a, String b)
-    {
-        return a.equals(b);
-    }
 
+//for testing prints the hashmap
+private static void printmap(HashMap hm)
+{
+    System.out.println("Hmap:");
+    for(Object objname:hm.keySet()) {
+        System.out.print(objname + ":");
+        System.out.print(hm.get(objname) + "\n");
+    }
+}
 
 
 
 }
+
