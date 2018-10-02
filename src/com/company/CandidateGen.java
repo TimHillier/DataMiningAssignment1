@@ -8,7 +8,7 @@ import java.util.Collections;
 public class CandidateGen {
     static int MIN = -1;
 
-
+    //used for setting the minthresh.
     public static void CandidateGen(int _min)
     {
         MIN = _min;
@@ -24,25 +24,22 @@ public class CandidateGen {
         {
             for(int j = 0; j< InputArray[i].length;j++)
             {
-                if(found.contains(InputArray[i][j]))
-                {
-
-                }
-                else
+                if(!(found.contains(InputArray[i][j])))
                 {
                     found.add(InputArray[i][j]);
-                }
 
+                }
             }
 
         }
-        MIN = found.size() / (100/MIN); // this is trash but I cant math rn. 
+
+        MIN = found.size() / (100/MIN); // this is trash but I cant math rn.
 
 
         HashMap candidates = HashMapTest(found);
         ElementCounter(InputArray,candidates);
         printmap(candidates);
-        System.out.println("min " + MIN);
+//        System.out.println("min " + MIN);
         Trim(candidates,MIN);
         printmap(candidates);
 
@@ -53,7 +50,11 @@ public class CandidateGen {
         return Out;
     }
 
-    //count the number of elements in the input and update the hash map.
+    /**
+     * Counts the Number of Unique elements in the data. Adds the number to the hashmap.
+     * @param IN The String of unique Elements found.
+     * @param HM The Hashmap for this iteration.
+     */
     private static void ElementCounter(String[][] IN, HashMap HM)
     {
         for(int i = 0; i < IN.length; i++)
@@ -69,8 +70,11 @@ public class CandidateGen {
 
     }
 
-
-    //Generate a hashmap for the current values.
+    /**
+     *
+     * @param found A list of unique elements from the data.
+     * @return Returns a hashmap of the Unique elements.
+     */
     private static HashMap HashMapTest(ArrayList<String> found)
     {
         //will a hashmap work for this?
@@ -83,17 +87,27 @@ public class CandidateGen {
         return hmap;
     }
 
-    //remove anything below the threshold.
+    /**
+     *  remove anything below the threshold.
+     * @param HM The HashMap that holds this iteration
+     * @param MIN The minimum threashold to search for.
+     */
     private static void Trim(HashMap HM, int MIN)
     {
         for(int i = 0; i < MIN;i++)
         {
-            HM.values().remove(i);
+            HM.values().remove(i); //its slow at higher data thigns
         }
 
 
     }
 
+
+    //generate ck+1
+    private static void GenerateNext()
+    {
+
+    }
 
 //for testing prints the hashmap
 private static void printmap(HashMap hm)
@@ -104,6 +118,8 @@ private static void printmap(HashMap hm)
         System.out.print(hm.get(objname) + "\n");
     }
 }
+
+
 
 
 
