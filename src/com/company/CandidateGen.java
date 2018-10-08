@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 public class CandidateGen {
     static int MIN = -1;
     static String[] found;
+    static boolean running = true;
 
     //used for setting the minthresh.
     public static void CandidateGen(int _min)
@@ -15,7 +16,11 @@ public class CandidateGen {
     }
 
 
-
+    /**
+     * This needs to change.
+     * @param InputArray The input table with all the transactions and items.
+     * @return probably nothign.
+     */
     public static Block[] Generate(String[][] InputArray)
     {
 
@@ -26,12 +31,26 @@ public class CandidateGen {
 
         HashMap candidates = HashMapper(found);
         ElementCounter(InputArray,candidates);
-        printmap(candidates);
+//        printmap(candidates);
 //        System.out.println("min " + MIN);
         Trim(candidates,MIN,found);
-        System.out.println("found" + Arrays.toString(found));
-        printmap(candidates);
-        GenerateNext(found);
+        System.out.println("found" + Arrays.toString(found));//why?
+//        printmap(candidates);
+
+        String[][] t = GenerateNext(found);
+
+        for(int i = 0; i < 3; i++)
+        {
+
+
+        }
+
+
+
+        while(running)
+        {
+
+        }
 
 
         Block[] Out = null;
@@ -73,7 +92,7 @@ public class CandidateGen {
         {
             hmap.put(f,0); //put all the things into the map and set them equal to zero.
         }
-        printmap(hmap);
+//        printmap(hmap);
         return hmap;
     }
 
@@ -86,21 +105,21 @@ public class CandidateGen {
      */
     private static void Trim(HashMap HM, int MIN, String[] FND)
     {
-        ArrayList<String> removed = new ArrayList<>();
         for(int i = 0; i < MIN;i++)
         {
 
             HM.values().remove(i); //its slow at higher data thigns
         }
-        System.out.println("Here: " + HM.keySet()); //sends collections take these and make them the new found.
+//        System.out.println("Here: " + HM.keySet()); //sends collections take these and make them the new found.
         String[] s = new String[HM.size()];
-        for(int i = 0; i < HM.size();i++)
+        Set<String> keys = HM.keySet();
+        int i = 0;
+        for(String key: keys)
         {
-            //We got em
-            s[i] = HM.keySet().iterator().next().toString();
-            HM.keySet().iterator().remove();
-
+            s[i] = key;
+            i++;
         }
+
         found = s;
 
     }
@@ -110,10 +129,49 @@ public class CandidateGen {
     /**
      * Generates ck+1
      */
-    private static void GenerateNext(String[] FND)
+    private static String[][] GenerateNext(String[] FND)
     {
+        //if im given an array
+        ArrayList<String[]> Permuations = new ArrayList<>();
+        System.out.println("Generate Next From: " + Arrays.toString(FND));//
+        for(int i= 0; i <FND.length-1; i++)
+        {
+            for(int j = i+1; j < FND.length;j++)
+            {
+                String[] t ={FND[i],FND[j]};
+                Permuations.add(t);
+            }
+        }
+
+        System.out.println("Permutations: " + Arrays.deepToString( Permuations.toArray()));
+
+        return ListToArray(Permuations);
 
     }
+
+    /**
+     *
+     * @param t The input array of permutations
+     * @return A string array of permutations.
+     */
+    private static String[][] ListToArray(ArrayList<String[]> t)
+    {
+        String[][] TempArray = new String[t.size()][];
+        for(int i = 0; i < t.size(); i++)
+        {
+            Object[] Temp = t.get(i);//.toArray();
+            String[] a = Arrays.copyOf(Temp, Temp.length, String[].class);
+            TempArray[i] = a;
+        }
+//        System.out.println("Temp Array: " + Arrays.deepToString(TempArray));
+
+        return TempArray;
+
+
+
+    }
+
+
 
 
     /**
