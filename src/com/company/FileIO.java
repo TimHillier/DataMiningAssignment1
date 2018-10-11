@@ -62,10 +62,10 @@ public class FileIO {
             System.out.println("Start: " + Arrays.deepToString(BigBrotherArray));
             Block[] n = CandidateGen.Generate(BigBrotherArray);
 
-            for(int i = 0; i < n.length; i++)
-            {
-                System.out.println("Element: " + n[i].getElement() + " : " + n[i].getAmount());
-            }
+//            for(int i = 0; i < n.length; i++)
+//            {
+//                System.out.println("Element: " + n[i].getElement() + " : " + n[i].getAmount());
+//            }
 
 
         }

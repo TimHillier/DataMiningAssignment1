@@ -1,13 +1,11 @@
 package com.company;
 
-import java.lang.reflect.Array;
 import java.util.*;
-import java.util.stream.Stream;
-
+import java.util.stream.*;
 public class CandidateGen {
     static int MIN = -1;
-    static String[] found;
-    static boolean running = true;
+    static String[][] found;
+    static boolean running = false;
 
     //used for setting the minthresh.
     public static void CandidateGen(int _min)
@@ -31,28 +29,15 @@ public class CandidateGen {
 
         HashMap candidates = HashMapper(found);
         ElementCounter(InputArray,candidates);
-//        printmap(candidates);
-//        System.out.println("min " + MIN);
         Trim(candidates,MIN,found);
-        System.out.println("found" + Arrays.toString(found));//why?
-//        printmap(candidates);
+        System.out.println("found" + Arrays.deepToString(found));//why?
 
         String[][] t = GenerateNext(found);
 
-        for(int i = 0; i < 3; i++)
-        {
-
-
-        }
-
-
-
-        while(running)
-        {
-
-        }
-
-
+        candidates = HashMapper(t);
+        ElementCounter(InputArray,candidates);
+        System.out.println("found: " + Arrays.deepToString(found));
+        Trim(candidates,MIN,found);
         Block[] Out = null;
 
 
@@ -64,36 +49,91 @@ public class CandidateGen {
      * @param IN The String of unique Elements found.
      * @param HM The Hashmap for this iteration.
      */
-    private static void ElementCounter(String[][] IN, HashMap HM)
+//    private static void ElementCounter(String[][] IN, HashMap HM)
+//    {
+//        for(int i = 0; i < IN.length; i++)
+//        {
+//            for(int j = 0; j<IN[i].length;j++)
+//            {
+//                if(HM.containsKey(IN[i][j]))
+//                {
+//                    HM.put(IN[i][j],(int)HM.get(IN[i][j])+1);
+//                }
+//            }
+//        }
+//
+//    }
+
+    private static void ElementCounter(String[][] IN,HashMap HM)
     {
-        for(int i = 0; i < IN.length; i++)
+        Object[] objarry = HM.keySet().toArray();
+        String[][] temp = Arrays.stream(objarry).toArray(String[][]::new);
+        for(int i = 0; i < IN.length;i++)
         {
-            for(int j = 0; j<IN[i].length;j++)
+            for(int j = 0; j < objarry.length;j++)
             {
-                if(HM.containsKey(IN[i][j]))
+               if(IsSubSet(IN[i], temp[j]))
                 {
-                    HM.put(IN[i][j],(int)HM.get(IN[i][j])+1);
+                    HM.put(objarry[j],(int)HM.get(objarry[j])+1);
                 }
             }
         }
-
     }
 
+
     /**
-     *
-     * @param found A list of unique elements from the data.
-     * @return Returns a hashmap of the Unique elements.
+     * Tests to see if the Generated Candidates are in the. This is dumb
+     * @param IN The array that you want to look for the substring in
+     * @param Test The sub string youre lookcing for.
+     * @return true or false depending on if the substring exists.
      */
-    private static HashMap HashMapper(String[] found)
+    private static boolean IsSubSet(String[] IN, String[] Test)
     {
-        //will a hashmap work for this?
-        HashMap<String,Integer> hmap = new HashMap<String,Integer>();
-        for(String f: found)
+        int a = 0;
+        for(int i = 0; i < IN.length; i++)
         {
-            hmap.put(f,0); //put all the things into the map and set them equal to zero.
+            for(int j = 0; j < Test.length; j++)
+            {
+                if(IN[i].equals(Test[j]))
+                {
+                    a++;
+                }
+            }
         }
-//        printmap(hmap);
+        return a == Test.length;
+    }
+//    /**
+//     *
+//     * @param found A list of unique elements from the data.
+//     * @return Returns a hashmap of the Unique elements.
+//     */
+//    private static HashMap HashMapper(String[] found)
+//    {
+//        //will a hashmap work for this?
+//        HashMap<String,Integer> hmap = new HashMap<>();
+//        for(String f: found)
+//        {
+//            hmap.put(f,0); //put all the things into the map and set them equal to zero.
+//        }
+////        printmap(hmap);
+//        return hmap;
+//    }
+
+    /**
+     * For later hashmaps.
+     * @param found A list of unique lists of elements from the data.
+     * @return Returns a hashmap of unique elements.
+     */
+    private static HashMap HashMapper(String[][] found)
+    {
+        HashMap<String[],Integer> hmap = new HashMap<>();
+        for(String[] f: found)
+        {
+            hmap.put(f,0);
+        }
+        printmap(hmap);
         return hmap;
+
     }
 
     /**
@@ -103,7 +143,7 @@ public class CandidateGen {
      * @param MIN The minimum threashold to search for.
      * @param FND The found array.
      */
-    private static void Trim(HashMap HM, int MIN, String[] FND)
+    private static void Trim(HashMap HM, int MIN, String[][] FND)
     {
         for(int i = 0; i < MIN;i++)
         {
@@ -111,15 +151,18 @@ public class CandidateGen {
             HM.values().remove(i); //its slow at higher data thigns
         }
 //        System.out.println("Here: " + HM.keySet()); //sends collections take these and make them the new found.
-        String[] s = new String[HM.size()];
+        String[][] s = new String[HM.size()][1];
         Set<String> keys = HM.keySet();
+        String[][] arry = keys.toArray(new String[keys.size()][]);
         int i = 0;
-        for(String key: keys)
+        for(String[] key: arry)
         {
-            s[i] = key;
+//            System.out.println("wtf: " + Arrays.toString(key));
+            s[i][0] = Arrays.toString(key);
+//            System.out.println(s[i][0]);
             i++;
         }
-
+        System.out.print(Arrays.deepToString(s));
         found = s;
 
     }
@@ -129,16 +172,16 @@ public class CandidateGen {
     /**
      * Generates ck+1
      */
-    private static String[][] GenerateNext(String[] FND)
+    private static String[][] GenerateNext(String[][] FND)
     {
         //if im given an array
         ArrayList<String[]> Permuations = new ArrayList<>();
-        System.out.println("Generate Next From: " + Arrays.toString(FND));//
+        System.out.println("Generate Next From: " + Arrays.deepToString(FND));//
         for(int i= 0; i <FND.length-1; i++)
         {
             for(int j = i+1; j < FND.length;j++)
             {
-                String[] t ={FND[i],FND[j]};
+                String[] t ={FND[i][0],FND[j][0]};
                 Permuations.add(t);
             }
         }
@@ -179,7 +222,7 @@ public class CandidateGen {
      * @param InputArray The array of all transactions.
      * @return The array that is the set.
      */
-    private static String[] GenerateSet(String[][] InputArray)
+    private static String[][] GenerateSet(String[][] InputArray)
     {
         ArrayList<String> found = new ArrayList<String>();  //for searching.
 
@@ -195,18 +238,24 @@ public class CandidateGen {
             }
 
         }
-         String[] f = found.toArray(new String[found.size()]);
+        String[][] f = new String[found.size()][];
+        for(int i = 0; i < found.size();i++)
+        {
+            String[] temp = {found.get(i)};
+            f[i] = temp;
+        }
          return f;
     }
 
 //for testing prints the hashmap
 private static void printmap(HashMap hm)
 {
-    System.out.println("Hmap:");
-    for(Object objname:hm.keySet()) {
-        System.out.print(objname + ":");
-        System.out.print(hm.get(objname) + "\n");
-    }
+    System.out.print("Hmap:");
+    System.out.println(Arrays.deepToString(hm.keySet().toArray()));
+//    for(Object objname:hm.keySet()) {
+//        System.out.print( objname.toString()+ ":");
+//        System.out.print(hm.get(objname) + "\n");
+//    }
 }
 
 
