@@ -84,6 +84,8 @@ public class CandidateGen {
             {
                 pairs.remove(0);
             }
+            uniqueness();
+
 
         }
 
@@ -118,7 +120,7 @@ public class CandidateGen {
         }
         System.out.println("Count: " + Arrays.toString(count.toArray()));
 
-        for(int i = count.size()-1; i > 0; i-- )
+        for(int i = count.size()-1; i >= 0; i-- )
         {
             if(count.get(i) < MIN)
             {
@@ -142,24 +144,36 @@ public class CandidateGen {
         System.out.println("Set: " + Arrays.deepToString(InputSet.toArray()));
         MIN = InputSet.size() / (100/MIN);
         System.out.println("Min: " + MIN);
-        GeneratePairs();
-        System.out.println("Pairs: " + Arrays.deepToString(pairs.toArray()) + "\nFirst Trim");
-        Trim(InputArray);
-        GeneratePairs();
-        System.out.println("Pairs: " + Arrays.deepToString(pairs.toArray()) + "\nSecond Trim");
-        Trim(InputArray);
-        GeneratePairs();
-        System.out.println("Pairs: " + Arrays.deepToString(pairs.toArray()) + "\nThird Trim");
-        Trim(InputArray);
-        GeneratePairs();
+
+        for(int i = 0; i < 3; i++)
+        {
+            GeneratePairs();
+            System.out.println("Pairs: " + Arrays.deepToString(pairs.toArray()) + "\n" + i +" Trim");
+            Trim(InputArray);
+        }
 
         System.out.println("END");
 
 
 
     }
+    private static void uniqueness()
     {
+        for(int i = 0; i< pairs.size();i++)
+        {
+            Collections.sort(pairs.get(i));
+        }
 
+        for(int i = 0; i < pairs.size()-1;i++)
+        {
+            for(int j =1; j< pairs.size();j++)
+            {
+                if(pairs.get(i).equals(pairs.get(j)))
+                {
+                    pairs.remove(pairs.get(j));
+                }
+            }
+        }
     }
 }
 
