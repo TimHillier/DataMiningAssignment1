@@ -60,7 +60,7 @@ public class FileIO {
 
            // System.out.println("First: " + First);
             System.out.println("Start: " + Arrays.deepToString(BigBrotherArray));
-            Block[] n = CandidateGen.Generate(BigBrotherArray);
+            CandidateGen.Generate(BigBrotherArray);
 
 //            for(int i = 0; i < n.length; i++)
 //            {

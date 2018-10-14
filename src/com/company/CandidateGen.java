@@ -1,266 +1,166 @@
 package com.company;
 
+import com.sun.deploy.util.ArrayUtil;
+
 import java.util.*;
-import java.util.stream.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class CandidateGen {
     static int MIN = -1;
-    static String[][] found;
-    static boolean running = false;
+    static String[][] IN;
+    static ArrayList<String> InputSet = new ArrayList<>();
+    static ArrayList<ArrayList<String>> pairs = new ArrayList<>();
+    static ArrayList<String> Removed = new ArrayList();
 
-    //used for setting the minthresh.
-    public static void CandidateGen(int _min)
-    {
+    /**
+     * Used for setting the min Thresh
+     * @param _min The minimum Threashhold in percent.
+     */
+    public static void CandidateGen(int _min) {
         MIN = _min;
     }
 
-
     /**
-     * This needs to change.
-     * @param InputArray The input table with all the transactions and items.
-     * @return probably nothign.
+     * Generates a set from the input
+     * @param InputArray The Transactions.
      */
-    public static Block[] Generate(String[][] InputArray)
+    private static void GenerateSet(String[][] InputArray)
     {
-
-        found = GenerateSet(InputArray);
-
-        MIN = found.length / (100/MIN); // this is trash but I cant math rn.
-
-
-        HashMap candidates = HashMapper(found);
-        ElementCounter(InputArray,candidates);
-        Trim(candidates,MIN,found);
-        System.out.println("found" + Arrays.deepToString(found));//why?
-
-        String[][] t = GenerateNext(found);
-
-        candidates = HashMapper(t);
-        ElementCounter(InputArray,candidates);
-        System.out.println("found: " + Arrays.deepToString(found));
-        Trim(candidates,MIN,found);
-        Block[] Out = null;
-
-
-        return Out;
-    }
-
-    /**
-     * Counts the Number of Unique elements in the data. Adds the number to the hashmap.
-     * @param IN The String of unique Elements found.
-     * @param HM The Hashmap for this iteration.
-     */
-//    private static void ElementCounter(String[][] IN, HashMap HM)
-//    {
-//        for(int i = 0; i < IN.length; i++)
-//        {
-//            for(int j = 0; j<IN[i].length;j++)
-//            {
-//                if(HM.containsKey(IN[i][j]))
-//                {
-//                    HM.put(IN[i][j],(int)HM.get(IN[i][j])+1);
-//                }
-//            }
-//        }
-//
-//    }
-
-    private static void ElementCounter(String[][] IN,HashMap HM)
-    {
-        Object[] objarry = HM.keySet().toArray();
-        String[][] temp = Arrays.stream(objarry).toArray(String[][]::new);
-        for(int i = 0; i < IN.length;i++)
-        {
-            for(int j = 0; j < objarry.length;j++)
-            {
-               if(IsSubSet(IN[i], temp[j]))
-                {
-                    HM.put(objarry[j],(int)HM.get(objarry[j])+1);
-                }
-            }
-        }
-    }
-
-
-    /**
-     * Tests to see if the Generated Candidates are in the. This is dumb
-     * @param IN The array that you want to look for the substring in
-     * @param Test The sub string youre lookcing for.
-     * @return true or false depending on if the substring exists.
-     */
-    private static boolean IsSubSet(String[] IN, String[] Test)
-    {
-        int a = 0;
-        for(int i = 0; i < IN.length; i++)
-        {
-            for(int j = 0; j < Test.length; j++)
-            {
-                if(IN[i].equals(Test[j]))
-                {
-                    a++;
-                }
-            }
-        }
-        return a == Test.length;
-    }
-//    /**
-//     *
-//     * @param found A list of unique elements from the data.
-//     * @return Returns a hashmap of the Unique elements.
-//     */
-//    private static HashMap HashMapper(String[] found)
-//    {
-//        //will a hashmap work for this?
-//        HashMap<String,Integer> hmap = new HashMap<>();
-//        for(String f: found)
-//        {
-//            hmap.put(f,0); //put all the things into the map and set them equal to zero.
-//        }
-////        printmap(hmap);
-//        return hmap;
-//    }
-
-    /**
-     * For later hashmaps.
-     * @param found A list of unique lists of elements from the data.
-     * @return Returns a hashmap of unique elements.
-     */
-    private static HashMap HashMapper(String[][] found)
-    {
-        HashMap<String[],Integer> hmap = new HashMap<>();
-        for(String[] f: found)
-        {
-            hmap.put(f,0);
-        }
-        printmap(hmap);
-        return hmap;
-
-    }
-
-    /**
-     * remove anything below the threshold.
-     * Also Trims the found Array.
-     * @param HM The HashMap that holds this iteration
-     * @param MIN The minimum threashold to search for.
-     * @param FND The found array.
-     */
-    private static void Trim(HashMap HM, int MIN, String[][] FND)
-    {
-        for(int i = 0; i < MIN;i++)
-        {
-
-            HM.values().remove(i); //its slow at higher data thigns
-        }
-//        System.out.println("Here: " + HM.keySet()); //sends collections take these and make them the new found.
-        String[][] s = new String[HM.size()][1];
-        Set<String> keys = HM.keySet();
-        String[][] arry = keys.toArray(new String[keys.size()][]);
-        int i = 0;
-        for(String[] key: arry)
-        {
-//            System.out.println("wtf: " + Arrays.toString(key));
-            s[i][0] = Arrays.toString(key);
-//            System.out.println(s[i][0]);
-            i++;
-        }
-        System.out.print(Arrays.deepToString(s));
-        found = s;
-
-    }
-
-
-
-    /**
-     * Generates ck+1
-     */
-    private static String[][] GenerateNext(String[][] FND)
-    {
-        //if im given an array
-        ArrayList<String[]> Permuations = new ArrayList<>();
-        System.out.println("Generate Next From: " + Arrays.deepToString(FND));//
-        for(int i= 0; i <FND.length-1; i++)
-        {
-            for(int j = i+1; j < FND.length;j++)
-            {
-                String[] t ={FND[i][0],FND[j][0]};
-                Permuations.add(t);
-            }
-        }
-
-        System.out.println("Permutations: " + Arrays.deepToString( Permuations.toArray()));
-
-        return ListToArray(Permuations);
-
-    }
-
-    /**
-     *
-     * @param t The input array of permutations
-     * @return A string array of permutations.
-     */
-    private static String[][] ListToArray(ArrayList<String[]> t)
-    {
-        String[][] TempArray = new String[t.size()][];
-        for(int i = 0; i < t.size(); i++)
-        {
-            Object[] Temp = t.get(i);//.toArray();
-            String[] a = Arrays.copyOf(Temp, Temp.length, String[].class);
-            TempArray[i] = a;
-        }
-//        System.out.println("Temp Array: " + Arrays.deepToString(TempArray));
-
-        return TempArray;
-
-
-
-    }
-
-
-
-
-    /**
-     * Generates a set of elements given a list of transactions.
-     * @param InputArray The array of all transactions.
-     * @return The array that is the set.
-     */
-    private static String[][] GenerateSet(String[][] InputArray)
-    {
-        ArrayList<String> found = new ArrayList<String>();  //for searching.
 
         for(int i = 0; i < InputArray.length;i++)
         {
-            for(int j = 0; j< InputArray[i].length;j++)
+            for(int j = 0; j < InputArray[i].length;j++)
             {
-                if(!(found.contains(InputArray[i][j])))
+                if(!(InputSet.contains(InputArray[i][j])))
                 {
-                    found.add(InputArray[i][j]);
-
+                    InputSet.add(InputArray[i][j]);
                 }
+            }
+        }
+
+    }
+
+    private static void GeneratePairs()
+    {
+        if(pairs.size() < 1)
+        {
+            for(String p: InputSet)
+            {
+                ArrayList<String> temp = new ArrayList<>();
+                temp.add(p);
+                pairs.add(temp);
+            }
+        }
+        else
+        {
+//            for(int i = 0; i < pairs.size(); i++)
+//            {
+//                for(int j = i+1; j < InputSet.size(); j++)
+//                {
+//                    if(!(pairs.get(i).contains(InputSet.get(j))))
+//                    {
+//                        pairs.get(i).add(InputSet.get(j));
+//                        break;
+//                    }
+//                }
+//            }
+            int pairsize = pairs.size();
+            for(int i = 0; i<pairsize-1;i++)
+            {
+                for(int j = i+1; j<pairsize;j++)
+                {
+
+                    List<String> newList = Stream.of(pairs.get(i),pairs.get(j)).flatMap(List::stream).collect(Collectors.toList());
+                    ArrayList<String> t = new ArrayList<>();
+                    t.addAll(newList);
+                    Set<String> s = new LinkedHashSet<>(t);
+                    t = new ArrayList<>(s);
+                    pairs.add(t);
+                    System.out.println(Arrays.toString(pairs.toArray()));
+                }
+            }
+            for(int i = 0; i<pairsize;i++)
+            {
+                pairs.remove(0);
             }
 
         }
-        String[][] f = new String[found.size()][];
-        for(int i = 0; i < found.size();i++)
-        {
-            String[] temp = {found.get(i)};
-            f[i] = temp;
-        }
-         return f;
+
+
     }
 
-//for testing prints the hashmap
-private static void printmap(HashMap hm)
-{
-    System.out.print("Hmap:");
-    System.out.println(Arrays.deepToString(hm.keySet().toArray()));
-//    for(Object objname:hm.keySet()) {
-//        System.out.print( objname.toString()+ ":");
-//        System.out.print(hm.get(objname) + "\n");
-//    }
+    private static void Trim(String[][] InputArray)
+    {
+        ArrayList<Integer> count = new ArrayList<>(Collections.nCopies(pairs.size(), 0)) ;
+        System.out.println("Inputset Size: " + InputSet.size());
+
+//        int[] count = new int[InputSet.size()];
+        for(int i = 0; i < InputArray.length; i++)
+        {
+            for(int j = 0; j < pairs.size(); j++)
+            {
+                for(int k =0; k<pairs.get(j).size();k++)
+                {
+
+//                    if(Arrays.stream(InputArray[i]).forEach(pairs.get(j).get(k)::contains))
+                    if(Arrays.asList(InputArray[i]).containsAll(pairs.get(j)))
+                    {
+//                        System.out.println("Match: " + Arrays.toString(InputArray[i]) +","+ pairs.get(j).get(k));
+    //                    int n = count.get(j) + 1;
+                        count.set(j,count.get(j) + 1);
+                        break;
+                    }
+                }
+            }
+
+
+        }
+        System.out.println("Count: " + Arrays.toString(count.toArray()));
+
+        for(int i = count.size()-1; i > 0; i-- )
+        {
+            if(count.get(i) < MIN)
+            {
+                count.remove(i);
+//                System.out.println("InputSet: " + Arrays.deepToString(InputSet.toArray()));
+//                InputSet.remove(InputSet.indexOf(pairs.get(i).get(0)));
+                pairs.remove(i);
+
+
+                System.out.println("Size: " + pairs.size());
+            }
+        }
+        System.out.println("After Removed: ");
+        System.out.println("Pairs: " + Arrays.toString(pairs.toArray()));
+        System.out.println("Count: " + Arrays.toString(count.toArray()));
+    }
+
+    public static void Generate(String[][] InputArray)
+    {
+        GenerateSet(InputArray);
+        System.out.println("Set: " + Arrays.deepToString(InputSet.toArray()));
+        MIN = InputSet.size() / (100/MIN);
+        System.out.println("Min: " + MIN);
+        GeneratePairs();
+        System.out.println("Pairs: " + Arrays.deepToString(pairs.toArray()) + "\nFirst Trim");
+        Trim(InputArray);
+        GeneratePairs();
+        System.out.println("Pairs: " + Arrays.deepToString(pairs.toArray()) + "\nSecond Trim");
+        Trim(InputArray);
+        GeneratePairs();
+        System.out.println("Pairs: " + Arrays.deepToString(pairs.toArray()) + "\nThird Trim");
+        Trim(InputArray);
+        GeneratePairs();
+
+        System.out.println("END");
+
+
+
+    }
+    {
+
+    }
 }
 
-
-
-
-
-}
 
