@@ -77,7 +77,7 @@ public class CandidateGen {
                     Set<String> s = new LinkedHashSet<>(t);
                     t = new ArrayList<>(s);
                     pairs.add(t);
-                    System.out.println(Arrays.toString(pairs.toArray()));
+//                    System.out.println(Arrays.toString(pairs.toArray()));
                 }
             }
             for(int i = 0; i<pairsize;i++)
@@ -130,7 +130,7 @@ public class CandidateGen {
                 pairs.remove(i);
 
 
-                System.out.println("Size: " + pairs.size());
+//                System.out.println("Size: " + pairs.size());
             }
         }
         System.out.println("After Removed: ");
@@ -142,8 +142,9 @@ public class CandidateGen {
     {
         GenerateSet(InputArray);
         System.out.println("Set: " + Arrays.deepToString(InputSet.toArray()));
+
         MIN = InputSet.size() / (100/MIN);
-        System.out.println("Min: " + MIN);
+        System.out.println("Min: " + MIN + "\n Input Size: " + InputSet.size());
 
 //        for(int i = 0; i < 3; i++)
 //        {
@@ -161,6 +162,8 @@ public class CandidateGen {
         }
         while(!(pairs.isEmpty()));
 
+
+//        System.out.println("")
         System.out.println("END");
 
 

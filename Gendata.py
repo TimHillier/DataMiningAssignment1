@@ -15,12 +15,13 @@ def Create():
     f = open(name + ".txt", "w+")
     f.write(str(lines) + "\n")
     for i in range(lines):
-        f.write(str(i+1) + "    ")
+        f.write(str(i) + "    ")
         leng = random.randint(1,lines/3)
-        f.write(str(leng)+"    ")
-        for a in range(leng):
-            p = random.randint(1,lines/2)
-            f.write(str(p) + " ")
+        x = random.randint(1,leng)
+        f.write(str(leng-x+1)+"    ")
+        for a in range(x,leng+1):
+            #p = random.randint(1,lines/2)
+            f.write(str(a) + " ")
         f.write("\n")
     f.close
 
