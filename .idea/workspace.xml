@@ -28,13 +28,13 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="12490" />
+          <entry key="java" value="12550" />
           <entry key="txt" value="33" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="12490" />
+          <entry key="JAVA" value="12550" />
           <entry key="PLAIN_TEXT" value="33" />
         </counts>
       </usages-collector>
@@ -85,8 +85,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/company/CandidateGen.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="174">
-              <caret line="146" lean-forward="true" selection-start-line="146" selection-end-line="146" />
+            <state relative-caret-position="469">
+              <caret line="161" column="34" selection-start-line="161" selection-start-column="34" selection-end-line="161" selection-end-column="34" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -349,12 +349,12 @@
       <workItem from="1539037796798" duration="8198000" />
       <workItem from="1539117090379" duration="5468000" />
       <workItem from="1539455838323" duration="11445000" />
-      <workItem from="1539488462040" duration="760000" />
+      <workItem from="1539488462040" duration="1167000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="65958000" />
+    <option name="totallyTimeSpent" value="66365000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
@@ -445,8 +445,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/company/CandidateGen.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="174">
-          <caret line="146" lean-forward="true" selection-start-line="146" selection-end-line="146" />
+        <state relative-caret-position="469">
+          <caret line="161" column="34" selection-start-line="161" selection-start-column="34" selection-end-line="161" selection-end-column="34" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

@@ -145,12 +145,21 @@ public class CandidateGen {
         MIN = InputSet.size() / (100/MIN);
         System.out.println("Min: " + MIN);
 
-        for(int i = 0; i < 3; i++)
-        {
+//        for(int i = 0; i < 3; i++)
+//        {
+//            GeneratePairs();
+//            System.out.println("Pairs: " + Arrays.deepToString(pairs.toArray()) + "\n" + i +" Trim");
+//            Trim(InputArray);
+//        }
+
+        int i = 0;
+        do {
             GeneratePairs();
             System.out.println("Pairs: " + Arrays.deepToString(pairs.toArray()) + "\n" + i +" Trim");
             Trim(InputArray);
+            i++;
         }
+        while(!(pairs.isEmpty()));
 
         System.out.println("END");
 
