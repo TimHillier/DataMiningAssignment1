@@ -59,7 +59,14 @@ public class FileIO {
                 }
 
            // System.out.println("First: " + First);
-            System.out.println("Start: " + Arrays.deepToString(BigBrotherArray));
+            if(BigBrotherArray.length <100) {
+                System.out.println("Start: " + Arrays.deepToString(BigBrotherArray));
+            }
+            else
+            {
+                System.out.println("Start: Size To large to Display");
+            }
+
             CandidateGen.Generate(BigBrotherArray);
 
 //            for(int i = 0; i < n.length; i++)

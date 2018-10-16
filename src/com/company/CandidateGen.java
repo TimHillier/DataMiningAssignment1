@@ -1,7 +1,5 @@
 package com.company;
 
-import com.sun.deploy.util.ArrayUtil;
-
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -19,6 +17,7 @@ public class CandidateGen {
      */
     public static void CandidateGen(int _min) {
         MIN = _min;
+        System.out.println("With Uniqueness" );
     }
 
     /**
@@ -27,6 +26,7 @@ public class CandidateGen {
      */
     private static void GenerateSet(String[][] InputArray)
     {
+        System.out.println("Generating Set");
 
         for(int i = 0; i < InputArray.length;i++)
         {
@@ -43,6 +43,8 @@ public class CandidateGen {
 
     private static void GeneratePairs()
     {
+        System.out.println("Generating Pairs");
+
         if(pairs.size() < 1)
         {
             for(String p: InputSet)
@@ -54,17 +56,6 @@ public class CandidateGen {
         }
         else
         {
-//            for(int i = 0; i < pairs.size(); i++)
-//            {
-//                for(int j = i+1; j < InputSet.size(); j++)
-//                {
-//                    if(!(pairs.get(i).contains(InputSet.get(j))))
-//                    {
-//                        pairs.get(i).add(InputSet.get(j));
-//                        break;
-//                    }
-//                }
-//            }
             int pairsize = pairs.size();
             for(int i = 0; i<pairsize-1;i++)
             {
@@ -76,15 +67,36 @@ public class CandidateGen {
                     t.addAll(newList);
                     Set<String> s = new LinkedHashSet<>(t);
                     t = new ArrayList<>(s);
-                    pairs.add(t);
-//                    System.out.println(Arrays.toString(pairs.toArray()));
+                    Collections.sort(t);
+                    //I think generating thepairs is fast.
+                    //It might still be to many paris?
+                    //But it seems like Checking Uniqueness slows it down the most.
+//                    System.out.println("Size of check: " + 2 * pairs.get(0).size());
+                    if(t.size() == pairs.get(0).size()+1)
+                    {
+                        pairs.add(t);
+                    }
+
                 }
+
             }
+            //Time this
+            //With uniqueness is slower than without.
+            long startTime = System.currentTimeMillis();
+            uniqueness();
+            long endTime = System.currentTimeMillis();
+            System.out.println("Duration of Uniqueness: " + (endTime - startTime) + " Miliseconds");
             for(int i = 0; i<pairsize;i++)
             {
-                pairs.remove(0);
+                if(pairs.size() > 0)
+                {
+                    pairs.remove(0);
+                }
             }
-            uniqueness();
+            System.out.println("Pairs Size: " + pairs.size());
+
+
+
 
 
         }
@@ -94,10 +106,13 @@ public class CandidateGen {
 
     private static void Trim(String[][] InputArray)
     {
+        System.out.println("Trimming: " + pairs.size());
+
         ArrayList<Integer> count = new ArrayList<>(Collections.nCopies(pairs.size(), 0)) ;
         System.out.println("Inputset Size: " + InputSet.size());
 
 //        int[] count = new int[InputSet.size()];
+        //i*j*k
         for(int i = 0; i < InputArray.length; i++)
         {
             for(int j = 0; j < pairs.size(); j++)
@@ -108,8 +123,6 @@ public class CandidateGen {
 //                    if(Arrays.stream(InputArray[i]).forEach(pairs.get(j).get(k)::contains))
                     if(Arrays.asList(InputArray[i]).containsAll(pairs.get(j)))
                     {
-//                        System.out.println("Match: " + Arrays.toString(InputArray[i]) +","+ pairs.get(j).get(k));
-    //                    int n = count.get(j) + 1;
                         count.set(j,count.get(j) + 1);
                         break;
                     }
@@ -119,13 +132,11 @@ public class CandidateGen {
 
         }
         System.out.println("Count: " + Arrays.toString(count.toArray()));
-
         for(int i = count.size()-1; i >= 0; i-- )
         {
             if(count.get(i) < MIN)
             {
                 count.remove(i);
-//                System.out.println("InputSet: " + Arrays.deepToString(InputSet.toArray()));
 //                InputSet.remove(InputSet.indexOf(pairs.get(i).get(0)));
                 pairs.remove(i);
 
@@ -133,35 +144,41 @@ public class CandidateGen {
 //                System.out.println("Size: " + pairs.size());
             }
         }
-        System.out.println("After Removed: ");
-        System.out.println("Pairs: " + Arrays.toString(pairs.toArray()));
-        System.out.println("Count: " + Arrays.toString(count.toArray()));
+         System.out.println("After Removed: ");
+         System.out.println("Pairs: " + Arrays.toString(pairs.toArray()));
+         System.out.println("Count: " + Arrays.toString(count.toArray()));
     }
 
     public static void Generate(String[][] InputArray)
     {
+        long ST = System.currentTimeMillis();
+
+        System.out.println("Generating");
+
         GenerateSet(InputArray);
         System.out.println("Set: " + Arrays.deepToString(InputSet.toArray()));
+        System.out.println("Set Size: " + InputSet.size());
 
-        MIN = InputSet.size() / (100/MIN);
-        System.out.println("Min: " + MIN + "\n Input Size: " + InputSet.size());
+//        MIN = InputSet.size() / (100/MIN);
+        MIN = (int)Math.floor(InputArray.length * ((double)MIN/100));
 
-//        for(int i = 0; i < 3; i++)
-//        {
-//            GeneratePairs();
-//            System.out.println("Pairs: " + Arrays.deepToString(pairs.toArray()) + "\n" + i +" Trim");
-//            Trim(InputArray);
-//        }
+        System.out.println("Min: " + MIN + "\nInput Size: " + InputSet.size());
+
 
         int i = 0;
         do {
+            long startTime = System.currentTimeMillis();
             GeneratePairs();
-            System.out.println("Pairs: " + Arrays.deepToString(pairs.toArray()) + "\n" + i +" Trim");
+            long endTime = System.currentTimeMillis();
+            System.out.println("Duration of GeneratePairs: " + (endTime - startTime)+ " Miliseconds");
+            System.out.println("Pairs: " + Arrays.deepToString(pairs.toArray()) );
+            System.out.println("Trim Number " + i);
             Trim(InputArray);
             i++;
         }
         while(!(pairs.isEmpty()));
-
+        long ET = System.currentTimeMillis();
+        System.out.println("Duration of Program: " + (ET - ST)+ " Miliseconds");
 
 //        System.out.println("")
         System.out.println("END");
@@ -169,24 +186,78 @@ public class CandidateGen {
 
 
     }
+    //this is bad fix this.
+    //This makes it all slow af.
     private static void uniqueness()
     {
-        for(int i = 0; i< pairs.size();i++)
-        {
-            Collections.sort(pairs.get(i));
-        }
+        System.out.println("Uniqueness: " + pairs.size());
+            int removed = 0;
 
         for(int i = 0; i < pairs.size()-1;i++)
         {
-            for(int j =1; j< pairs.size();j++)
+
+            for(int j =i+1; j< pairs.size();j++)
             {
-                if(pairs.get(i).equals(pairs.get(j)))
+
+                if(listsareEquivelent(pairs.get(i),pairs.get(j)))
                 {
                     pairs.remove(pairs.get(j));
+                    removed++;
+
                 }
             }
         }
+        System.out.println("Uniqueness: Done. Removed: " + removed);
     }
+
+    /**
+     * returns true if two lists are the same.
+     * @param a List to compare
+     * @param b List to Compare
+     * @return True or False depending on weather theyre equal.
+     */
+    private static boolean listsareEquivelent(List<? extends Object>a, List<? extends Object>b)
+    {
+        if(a==null)
+        {
+            if(b==null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        if(b==null)
+        {
+            return false;
+        }
+        Map<Object, Integer> tempMap = new HashMap<>();
+        for(Object element : a) {
+            Integer currentCount = tempMap.get(element);
+            if(currentCount == null) {
+                tempMap.put(element, 1);
+            } else {
+                tempMap.put(element, currentCount+1);
+            }
+        }
+        for(Object element : b) {
+            Integer currentCount = tempMap.get(element);
+            if(currentCount == null) {
+                return false;
+            } else {
+                tempMap.put(element, currentCount-1);
+            }
+        }
+        for(Integer count : tempMap.values()) {
+            if(count != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }
 
 

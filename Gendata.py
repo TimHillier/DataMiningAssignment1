@@ -15,7 +15,7 @@ def Create():
     f = open(name + ".txt", "w+")
     f.write(str(lines) + "\n")
     for i in range(lines):
-        f.write(str(i) + "    ")
+        f.write(str(i+1) + "    ")
         leng = random.randint(1,lines/3)
         x = random.randint(1,leng)
         f.write(str(leng-x+1)+"    ")
