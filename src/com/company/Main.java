@@ -24,7 +24,7 @@ public class Main {
         File f = new File(args[0]);
         if(f.exists() && !f.isDirectory())
         {
-            location = args[0];
+            location = "./Data/"+args[0];
         }
         else
         {
