@@ -10,6 +10,7 @@ public class CandidateGen {
     static ArrayList<String> InputSet = new ArrayList<>();
     static ArrayList<ArrayList<String>> pairs = new ArrayList<>();
     static ArrayList<String> Removed = new ArrayList();
+    static ArrayList<Integer> count = new ArrayList();
 
     /**
      * Used for setting the min Thresh
@@ -17,7 +18,6 @@ public class CandidateGen {
      */
     public static void CandidateGen(int _min) {
         MIN = _min;
-        System.out.println("With Uniqueness" );
     }
 
     /**
@@ -26,7 +26,7 @@ public class CandidateGen {
      */
     private static void GenerateSet(String[][] InputArray)
     {
-        System.out.println("Generating Set");
+//        System.out.println("Generating Set");
 
         for(int i = 0; i < InputArray.length;i++)
         {
@@ -43,7 +43,8 @@ public class CandidateGen {
 
     private static void GeneratePairs()
     {
-        System.out.println("Generating Pairs");
+        System.out.println("Generating Pairs: Start");
+        long startTime = System.currentTimeMillis();
 
         if(pairs.size() < 1)
         {
@@ -71,7 +72,6 @@ public class CandidateGen {
                     //I think generating thepairs is fast.
                     //It might still be to many paris?
                     //But it seems like Checking Uniqueness slows it down the most.
-//                    System.out.println("Size of check: " + 2 * pairs.get(0).size());
                     if(t.size() == pairs.get(0).size()+1)
                     {
                         pairs.add(t);
@@ -82,10 +82,10 @@ public class CandidateGen {
             }
             //Time this
             //With uniqueness is slower than without.
-            long startTime = System.currentTimeMillis();
-            uniqueness();
-            long endTime = System.currentTimeMillis();
-            System.out.println("Duration of Uniqueness: " + (endTime - startTime) + " Miliseconds");
+            long st = System.currentTimeMillis();
+            uniqueness(); //uniqueness is in gen pairs, so subtract that time. genpairs - unique
+            long et = System.currentTimeMillis();
+            System.out.println("Duration of Uniqueness: " + (et - st) + " Miliseconds");
             for(int i = 0; i<pairsize;i++)
             {
                 if(pairs.size() > 0)
@@ -93,10 +93,12 @@ public class CandidateGen {
                     pairs.remove(0);
                 }
             }
-            System.out.println("Pairs Size: " + pairs.size());
+            System.out.println("Generating Pairs: End");
 
 
 
+            long endTime = System.currentTimeMillis();
+            System.out.println("Duration of GeneratePairs: " + (endTime - startTime - (et-st))+ " Miliseconds");
 
 
         }
@@ -104,83 +106,103 @@ public class CandidateGen {
 
     }
 
+    //Slow
     private static void Trim(String[][] InputArray)
     {
-        System.out.println("Trimming: " + pairs.size());
-
-        ArrayList<Integer> count = new ArrayList<>(Collections.nCopies(pairs.size(), 0)) ;
-        System.out.println("Inputset Size: " + InputSet.size());
-
-//        int[] count = new int[InputSet.size()];
-        //i*j*k
-        for(int i = 0; i < InputArray.length; i++)
-        {
-            for(int j = 0; j < pairs.size(); j++)
-            {
-                for(int k =0; k<pairs.get(j).size();k++)
-                {
-
-//                    if(Arrays.stream(InputArray[i]).forEach(pairs.get(j).get(k)::contains))
-                    if(Arrays.asList(InputArray[i]).containsAll(pairs.get(j)))
-                    {
-                        count.set(j,count.get(j) + 1);
-                        break;
-                    }
-                }
-            }
+        System.out.println("Trim: Start");
+//        System.out.println("Trimming: " + pairs.size());
+        long st = System.currentTimeMillis();
+        Count(InputArray);
+        long et = System.currentTimeMillis();
+        System.out.println("Duration of Count: " + (et - st)+ " Miliseconds");
 
 
-        }
-        System.out.println("Count: " + Arrays.toString(count.toArray()));
+        long startTime = System.currentTimeMillis();
+
+//        System.out.println("Count: " + Arrays.toString(count.toArray()));
         for(int i = count.size()-1; i >= 0; i-- )
         {
             if(count.get(i) < MIN)
             {
                 count.remove(i);
-//                InputSet.remove(InputSet.indexOf(pairs.get(i).get(0)));
                 pairs.remove(i);
 
 
-//                System.out.println("Size: " + pairs.size());
             }
         }
-         System.out.println("After Removed: ");
-         System.out.println("Pairs: " + Arrays.toString(pairs.toArray()));
-         System.out.println("Count: " + Arrays.toString(count.toArray()));
+        //print to file.
+
+//         System.out.println("After Removed: ");
+//         System.out.println("Pairs: " + Arrays.toString(pairs.toArray()));
+//         System.out.println("Count: " + Arrays.toString(count.toArray()));
+         System.out.println("Trim: End");
+        long endTime=System.currentTimeMillis();
+        System.out.println("Duration of Trim: " + (endTime - startTime)+ " Miliseconds");
+
+
     }
+
+    //slow
+    private static void Count(String[][] InputArray)
+    {
+        ArrayList<Integer> C = new ArrayList<>(Collections.nCopies(pairs.size(), 0)) ;
+        System.out.println("InputArray Size: " + InputArray.length);
+        for(int i = 0; i < InputArray.length; i++)
+        {
+            for(int j = 0; j < pairs.size(); j++)
+            {
+                if(InputArray[i].length >= pairs.get(j).size() && Arrays.asList(InputArray[i]).containsAll(pairs.get(j)))
+                {
+                    C.set(j,C.get(j) + 1);
+                }
+           }
+        }
+        count = C;
+//        return count;
+    }
+
+
+
 
     public static void Generate(String[][] InputArray)
     {
         long ST = System.currentTimeMillis();
 
-        System.out.println("Generating");
+        System.out.println("START");
 
         GenerateSet(InputArray);
-        System.out.println("Set: " + Arrays.deepToString(InputSet.toArray()));
-        System.out.println("Set Size: " + InputSet.size());
+//        System.out.println("Set: " + Arrays.deepToString(InputSet.toArray()));
+//        System.out.println("Set Size: " + InputSet.size());
 
 //        MIN = InputSet.size() / (100/MIN);
         MIN = (int)Math.floor(InputArray.length * ((double)MIN/100));
 
-        System.out.println("Min: " + MIN + "\nInput Size: " + InputSet.size());
+//        System.out.println("Min: " + MIN + "\nInput Size: " + InputSet.size());
 
 
         int i = 0;
         do {
-            long startTime = System.currentTimeMillis();
+//            long startTime = System.currentTimeMillis();
             GeneratePairs();
-            long endTime = System.currentTimeMillis();
-            System.out.println("Duration of GeneratePairs: " + (endTime - startTime)+ " Miliseconds");
-            System.out.println("Pairs: " + Arrays.deepToString(pairs.toArray()) );
-            System.out.println("Trim Number " + i);
+//            long endTime = System.currentTimeMillis();
+//            System.out.println("Duration of GeneratePairs: " + (endTime - startTime)+ " Miliseconds");
+//            System.out.println("Pairs: " + Arrays.deepToString(pairs.toArray()) );
+//            System.out.println("Trim Number " + i);
             Trim(InputArray);
+            for(int a = 0; a < count.size(); a++)
+            {
+                writeToFile("TestOutPut",pairs.get(a) + ":" + count.get(a));
+            }
+
+
+
+
             i++;
         }
         while(!(pairs.isEmpty()));
         long ET = System.currentTimeMillis();
         System.out.println("Duration of Program: " + (ET - ST)+ " Miliseconds");
 
-//        System.out.println("")
         System.out.println("END");
 
 
@@ -190,7 +212,7 @@ public class CandidateGen {
     //This makes it all slow af.
     private static void uniqueness()
     {
-        System.out.println("Uniqueness: " + pairs.size());
+        System.out.println("Uniqueness: Start");
             int removed = 0;
 
         for(int i = 0; i < pairs.size()-1;i++)
@@ -207,7 +229,8 @@ public class CandidateGen {
                 }
             }
         }
-        System.out.println("Uniqueness: Done. Removed: " + removed);
+        System.out.println("Uniqueness: Done.");
+
     }
 
     /**
@@ -256,6 +279,22 @@ public class CandidateGen {
             }
         }
         return true;
+    }
+
+    /**
+     * Write to file
+     * @param FileName Filename of the file to write to.
+     * @param words Words to write to file.
+     */
+    private static void writeToFile(String FileName, String words)
+    {
+        try {
+            FileIO.OutputToFile(FileName, words + "\n");
+        }
+        catch (Exception e)
+        {
+
+        }
     }
 
 }

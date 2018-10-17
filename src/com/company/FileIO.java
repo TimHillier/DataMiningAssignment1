@@ -1,7 +1,9 @@
 package com.company;
 import java.nio.Buffer;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+//import java.nio.file.Files;
+//import java.nio.file.Paths;
+//import java.nio.file.Path;
+import java.nio.file.*;
 import java.util.*;
 import java.io.*;
 import java.util.stream.Collectors;
@@ -16,23 +18,7 @@ public class FileIO {
 
 
     public static void GetInputFile(String loc) {
-        //come back later and try to find a better way to store and get the file.
-//        try(Stream<String> st = Files.lines(Paths.get(loc)))
-//        {
-//            //get the first element which is the number of transactions:
-//            First = st.findFirst().get();
-//            List<String> Disct;
-//
-//            System.out.println("There are " + First + " transactions");
-//            System.out.println(Disct);
-//
-//
-//        }
-//        catch(IOException e)
-//        {
-//
-//        }
-        //this is the boring way to do this/
+
         try (BufferedReader br = new BufferedReader(new FileReader(loc)))
         {
             String line;
@@ -85,8 +71,31 @@ public class FileIO {
     }
 
 
-    public static void parseInput()
+    /**
+     * Outputs the data to a file.
+     * @param Out String to output to file.
+     * @param fileName Name of the file to output to.
+     */
+    public static void OutputToFile(String fileName, String Out) throws IOException
     {
+
+
+        Path path = Paths.get(fileName);
+
+        if(!(Files.exists(path)))
+        {
+            Files.createFile(path);
+            System.out.println("File Created");
+        }
+        if(Files.exists(path))
+        {
+            System.out.println("File already exists");
+        }
+
+        byte[] words = Out.getBytes();
+        Files.write(path, words,StandardOpenOption.APPEND);
+
+
 
     }
 
