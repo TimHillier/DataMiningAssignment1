@@ -9,7 +9,7 @@ public class CandidateGen {
     static String[][] IN;
     static ArrayList<String> InputSet = new ArrayList<>();
     static ArrayList<ArrayList<String>> pairs = new ArrayList<>();
-    static ArrayList<String> Removed = new ArrayList();
+    static ArrayList<String> OUTPUT = new ArrayList();
     static ArrayList<Integer> count = new ArrayList();
 
     /**
@@ -191,7 +191,8 @@ public class CandidateGen {
             Trim(InputArray);
             for(int a = 0; a < count.size(); a++)
             {
-                writeToFile("TestOutPut",pairs.get(a) + ":" + count.get(a));
+                OUTPUT.add(pairs.get(a)+":"+count.get(a));
+//                writeToFile("TestOutPut",pairs.get(a) + ":" + count.get(a));
             }
 
 
@@ -203,7 +204,24 @@ public class CandidateGen {
         long ET = System.currentTimeMillis();
         System.out.println("Duration of Program: " + (ET - ST)+ " Miliseconds");
 
-        System.out.println("END");
+        System.out.println("END, Now Printing To FILE");
+        //check output for dupes.
+        for(int a = 0; a < OUTPUT.size()-1;a++)
+        {
+            for(int b = a+1;b<OUTPUT.size();b++)
+            {
+                if(OUTPUT.get(a).equals(OUTPUT.get(b)))
+                {
+                    OUTPUT.remove(b);
+                }
+            }
+
+        }
+        writeToFile("TestOutPut","|FPs| = " + OUTPUT.size());
+        for(int a = 0;a<OUTPUT.size();a++)
+        {
+                writeToFile("TestOutPut",OUTPUT.get(a));
+        }
 
 
 
@@ -281,6 +299,10 @@ public class CandidateGen {
         return true;
     }
 
+    private static void SaveString()
+    {
+
+    }
     /**
      * Write to file
      * @param FileName Filename of the file to write to.

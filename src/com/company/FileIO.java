@@ -85,11 +85,11 @@ public class FileIO {
         if(!(Files.exists(path)))
         {
             Files.createFile(path);
-            System.out.println("File Created");
+//            System.out.println("File Created");
         }
         if(Files.exists(path))
         {
-            System.out.println("File already exists");
+//            System.out.println("File already exists");
         }
 
         byte[] words = Out.getBytes();

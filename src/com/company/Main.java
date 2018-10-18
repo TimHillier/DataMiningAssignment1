@@ -21,10 +21,15 @@ public class Main {
     private static void GetArguments(String[] args)
     {
         //lets check to see if the file exists.
-        File f = new File(args[0]);
+        File b = new File(args[0]);
+        File f = new File("./Data/"+args[0]);
         if(f.exists() && !f.isDirectory())
         {
             location = "./Data/"+args[0];
+        }
+        else if(b.exists() && !b.isDirectory())
+        {
+            location = args[0];
         }
         else
         {

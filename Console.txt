@@ -1,0 +1,33 @@
+objc[30328]: Class JavaLaunchHelper is implemented in both /Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home/bin/java (0x107e434c0) and /Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home/jre/lib/libinstrument.dylib (0x108e224e0). One of the two will be used. Which one is undefined.
+Start: Size To large to Display
+START
+Generating Pairs: Start
+Trim: Start
+InputArray Size: 67557
+Duration of Count: 2304 Miliseconds
+Trim: End
+Duration of Trim: 0 Miliseconds
+Generating Pairs: Start
+Uniqueness: Start
+Uniqueness: Done.
+Duration of Uniqueness: 147 Miliseconds
+Generating Pairs: End
+Duration of GeneratePairs: 100 Miliseconds
+Trim: Start
+InputArray Size: 67557
+Duration of Count: 11279 Miliseconds
+Trim: End
+Duration of Trim: 0 Miliseconds
+Generating Pairs: Start
+Uniqueness: Start
+Uniqueness: Done.
+Duration of Uniqueness: 29151 Miliseconds
+Generating Pairs: End
+Duration of GeneratePairs: 380 Miliseconds
+Trim: Start
+InputArray Size: 67557
+Duration of Count: 205247 Miliseconds
+Trim: End
+Duration of Trim: 7 Miliseconds
+Generating Pairs: Start
+Uniqueness: Start
