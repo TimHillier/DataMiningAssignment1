@@ -1,33 +1,87 @@
-objc[30328]: Class JavaLaunchHelper is implemented in both /Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home/bin/java (0x107e434c0) and /Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home/jre/lib/libinstrument.dylib (0x108e224e0). One of the two will be used. Which one is undefined.
 Start: Size To large to Display
 START
 Generating Pairs: Start
 Trim: Start
 InputArray Size: 67557
-Duration of Count: 2304 Miliseconds
+Duration of Count: 1310 Miliseconds
 Trim: End
 Duration of Trim: 0 Miliseconds
 Generating Pairs: Start
 Uniqueness: Start
 Uniqueness: Done.
-Duration of Uniqueness: 147 Miliseconds
+Duration of Uniqueness: 11 Miliseconds
 Generating Pairs: End
-Duration of GeneratePairs: 100 Miliseconds
+Duration of GeneratePairs: 16 Miliseconds
 Trim: Start
 InputArray Size: 67557
-Duration of Count: 11279 Miliseconds
+Duration of Count: 2755 Miliseconds
 Trim: End
 Duration of Trim: 0 Miliseconds
 Generating Pairs: Start
 Uniqueness: Start
 Uniqueness: Done.
-Duration of Uniqueness: 29151 Miliseconds
+Duration of Uniqueness: 384 Miliseconds
 Generating Pairs: End
-Duration of GeneratePairs: 380 Miliseconds
+Duration of GeneratePairs: 81 Miliseconds
 Trim: Start
 InputArray Size: 67557
-Duration of Count: 205247 Miliseconds
+Duration of Count: 25147 Miliseconds
 Trim: End
-Duration of Trim: 7 Miliseconds
+Duration of Trim: 0 Miliseconds
+Generating Pairs: Start
+Uniqueness: Start
+Uniqueness: Done.
+Duration of Uniqueness: 10049 Miliseconds
+Generating Pairs: End
+Duration of GeneratePairs: 384 Miliseconds
+Trim: Start
+InputArray Size: 67557
+Duration of Count: 137822 Miliseconds
+Trim: End
+Duration of Trim: 2 Miliseconds
+Generating Pairs: Start
+Uniqueness: Start
+Uniqueness: Done.
+Duration of Uniqueness: 194572 Miliseconds
+Generating Pairs: End
+Duration of GeneratePairs: 4718 Miliseconds
+Trim: Start
+InputArray Size: 67557
+Duration of Count: 523378 Miliseconds
+Trim: End
+Duration of Trim: 16 Miliseconds
+Generating Pairs: Start
+Uniqueness: Start
+Uniqueness: Done.
+Duration of Uniqueness: 2480896 Miliseconds
+Generating Pairs: End
+Duration of GeneratePairs: 40606 Miliseconds
+Trim: Start
+InputArray Size: 67557
+Duration of Count: 1383373 Miliseconds
+Trim: End
+Duration of Trim: 80 Miliseconds
+Generating Pairs: Start
+Uniqueness: Start
+Uniqueness: Done.
+Duration of Uniqueness: 18237511 Miliseconds
+Generating Pairs: End
+Duration of GeneratePairs: 173270 Miliseconds
+Trim: Start
+InputArray Size: 67557
+Duration of Count: 2664941 Miliseconds
+Trim: End
+Duration of Trim: 199 Miliseconds
+Generating Pairs: Start
+Uniqueness: Start
+Uniqueness: Done.
+Duration of Uniqueness: 45151425 Miliseconds
+Generating Pairs: End
+Duration of GeneratePairs: 350588 Miliseconds
+Trim: Start
+InputArray Size: 67557
+Duration of Count: 2882106 Miliseconds
+Trim: End
+Duration of Trim: 166 Miliseconds
 Generating Pairs: Start
 Uniqueness: Start

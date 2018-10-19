@@ -39,7 +39,7 @@ public class Main {
         try
         {
             MinThresh = Integer.parseInt(args[1]); //the min threshold of the apiori program.
-            CandidateGen.CandidateGen(MinThresh);
+            CandidateGen.CandidateGen(MinThresh,location);
         }
         catch (NumberFormatException e)
         {

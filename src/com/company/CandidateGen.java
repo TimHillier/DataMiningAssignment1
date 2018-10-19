@@ -1,8 +1,11 @@
 package com.company;
 
+import java.nio.file.Paths;
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.io.File;
 
 public class CandidateGen {
     static int MIN = -1;
@@ -11,13 +14,15 @@ public class CandidateGen {
     static ArrayList<ArrayList<String>> pairs = new ArrayList<>();
     static ArrayList<String> OUTPUT = new ArrayList();
     static ArrayList<Integer> count = new ArrayList();
+    static String FileName = "";
 
     /**
      * Used for setting the min Thresh
      * @param _min The minimum Threashhold in percent.
      */
-    public static void CandidateGen(int _min) {
+    public static void CandidateGen(int _min,String _name) {
         MIN = _min;
+        FileName = "OutPut_" + Instant.now();
     }
 
     /**
@@ -41,9 +46,13 @@ public class CandidateGen {
 
     }
 
+    /**
+     * Generates the next set of pairs. Does the real heavy lifting.
+     * Basically generates ck+1
+     */
     private static void GeneratePairs()
     {
-        System.out.println("Generating Pairs: Start");
+//        System.out.println("Generating Pairs: Start");
         long startTime = System.currentTimeMillis();
 
         if(pairs.size() < 1)
@@ -85,7 +94,7 @@ public class CandidateGen {
             long st = System.currentTimeMillis();
             uniqueness(); //uniqueness is in gen pairs, so subtract that time. genpairs - unique
             long et = System.currentTimeMillis();
-            System.out.println("Duration of Uniqueness: " + (et - st) + " Miliseconds");
+//            System.out.println("Duration of Uniqueness: " + (et - st) + " Miliseconds");
             for(int i = 0; i<pairsize;i++)
             {
                 if(pairs.size() > 0)
@@ -93,12 +102,12 @@ public class CandidateGen {
                     pairs.remove(0);
                 }
             }
-            System.out.println("Generating Pairs: End");
+//            System.out.println("Generating Pairs: End");
 
 
 
             long endTime = System.currentTimeMillis();
-            System.out.println("Duration of GeneratePairs: " + (endTime - startTime - (et-st))+ " Miliseconds");
+//            System.out.println("Duration of GeneratePairs: " + (endTime - startTime - (et-st))+ " Miliseconds");
 
 
         }
@@ -107,14 +116,19 @@ public class CandidateGen {
     }
 
     //Slow
+
+    /**
+     * Trims the array of pairs so that we only get what we want.
+     * @param InputArray The input array of transactions
+     */
     private static void Trim(String[][] InputArray)
     {
-        System.out.println("Trim: Start");
+//        System.out.println("Trim: Start");
 //        System.out.println("Trimming: " + pairs.size());
         long st = System.currentTimeMillis();
         Count(InputArray);
         long et = System.currentTimeMillis();
-        System.out.println("Duration of Count: " + (et - st)+ " Miliseconds");
+//        System.out.println("Duration of Count: " + (et - st)+ " Miliseconds");
 
 
         long startTime = System.currentTimeMillis();
@@ -135,18 +149,23 @@ public class CandidateGen {
 //         System.out.println("After Removed: ");
 //         System.out.println("Pairs: " + Arrays.toString(pairs.toArray()));
 //         System.out.println("Count: " + Arrays.toString(count.toArray()));
-         System.out.println("Trim: End");
+//         System.out.println("Trim: End");
         long endTime=System.currentTimeMillis();
-        System.out.println("Duration of Trim: " + (endTime - startTime)+ " Miliseconds");
+//        System.out.println("Duration of Trim: " + (endTime - startTime)+ " Miliseconds");
 
 
     }
 
     //slow
+
+    /**
+     * Counts the number of times a pair appears in the actual transaction table.
+     * @param InputArray The transaction Array
+     */
     private static void Count(String[][] InputArray)
     {
         ArrayList<Integer> C = new ArrayList<>(Collections.nCopies(pairs.size(), 0)) ;
-        System.out.println("InputArray Size: " + InputArray.length);
+//        System.out.println("InputArray Size: " + InputArray.length);
         for(int i = 0; i < InputArray.length; i++)
         {
             for(int j = 0; j < pairs.size(); j++)
@@ -162,8 +181,10 @@ public class CandidateGen {
     }
 
 
-
-
+    /**
+     * The brain of the operations. calls everything needed to do apriori, and run until its done.
+     * @param InputArray The input array of transactions.
+     */
     public static void Generate(String[][] InputArray)
     {
         long ST = System.currentTimeMillis();
@@ -204,7 +225,7 @@ public class CandidateGen {
         long ET = System.currentTimeMillis();
         System.out.println("Duration of Program: " + (ET - ST)+ " Miliseconds");
 
-        System.out.println("END, Now Printing To FILE");
+        System.out.println("END! Now Printing To File");
         //check output for dupes.
         for(int a = 0; a < OUTPUT.size()-1;a++)
         {
@@ -217,20 +238,24 @@ public class CandidateGen {
             }
 
         }
-        writeToFile("TestOutPut","|FPs| = " + OUTPUT.size());
+        writeToFile(FileName,"|FPs| = " + OUTPUT.size());
         for(int a = 0;a<OUTPUT.size();a++)
         {
-                writeToFile("TestOutPut",OUTPUT.get(a));
+                writeToFile(FileName,OUTPUT.get(a));
         }
+        System.out.println("File at: " + Paths.get(FileName));
 
 
 
     }
-    //this is bad fix this.
-    //This makes it all slow af.
+   //Slow
+
+    /**
+     * Checks the pair list for uniqueness.
+     * removes situations where [a,b,c] [b,c,a] appear in the list.
+      */
     private static void uniqueness()
     {
-        System.out.println("Uniqueness: Start");
             int removed = 0;
 
         for(int i = 0; i < pairs.size()-1;i++)
@@ -247,7 +272,6 @@ public class CandidateGen {
                 }
             }
         }
-        System.out.println("Uniqueness: Done.");
 
     }
 
@@ -299,10 +323,7 @@ public class CandidateGen {
         return true;
     }
 
-    private static void SaveString()
-    {
 
-    }
     /**
      * Write to file
      * @param FileName Filename of the file to write to.
